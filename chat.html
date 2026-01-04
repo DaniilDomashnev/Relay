@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Relay | Главная</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+
+<body>
+  <div id="loader">
+    <div class="spinner"></div>
+  </div>
+
+  <div class="chat-layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <button class="menu-btn" id="open-settings-btn"><i class="ri-menu-line"></i></button>
+        <input type="text" class="search-bar" placeholder="Поиск..." disabled>
+      </div>
+
+      <div class="chats-list" id="chats-list">
+      </div>
+
+      <div style="padding: 15px;">
+        <button class="action-btn" id="fab-create-chat"
+          style="width: 100%; padding: 12px; background: var(--primary); border-radius: 50%; width: 50px; height: 50px; margin-left: auto; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 4px 10px rgba(108, 120, 211, 0.4); border:none; cursor: pointer;">
+          <i class="ri-pencil-fill" style="font-size: 1.5rem;"></i>
+        </button>
+      </div>
+    </aside>
+
+    <main class="chat-main">
+      <div class="chat-header" id="chat-header" style="display: none;">
+        <button class="menu-btn" id="back-btn" style="display: none;"><i class="ri-arrow-left-line"></i></button>
+        <div class="avatar" id="header-avatar" style="width: 40px; height: 40px; font-size: 1rem;">?</div>
+        <div class="chat-info">
+          <h4 id="header-username">Имя</h4>
+          <p id="header-status" style="color: var(--primary);">в сети</p>
+        </div>
+        <i class="ri-more-2-fill menu-btn"></i>
+      </div>
+
+      <div id="pinned-bar"
+        style="display: none; background: rgba(0,0,0,0.2); padding: 5px 15px; font-size: 0.8rem; border-left: 2px solid var(--primary); cursor: pointer; margin: 10px 20px 0;">
+        <div style="color: var(--primary); font-weight: 600;">Закрепленное сообщение</div>
+        <div id="pinned-text" style="color: var(--text-sec);">Текст...</div>
+      </div>
+
+      <div class="messages-area" id="messages-area">
+        <div class="empty-state"
+          style="text-align: center; margin-top: auto; margin-bottom: auto; color: var(--text-sec);">
+          <i class="ri-chat-1-line" style="font-size: 4rem; opacity: 0.3;"></i>
+          <p>Выберите чат для начала общения</p>
+        </div>
+      </div>
+
+      <form class="input-area" id="message-form" style="display: none;">
+        <div id="edit-badge"
+          style="position: absolute; bottom: 80px; left: 20%; right: 20%; background: var(--bg-surface); padding: 10px; border-radius: 10px; display: none; border-left: 3px solid var(--primary);">
+          <div style="display:flex; justify-content:space-between;">
+            <div>
+              <span style="color: var(--primary); font-size: 0.8rem;">Редактирование</span>
+              <p id="editing-preview"
+                style="font-size: 0.9rem; opacity: 0.8; white-space: nowrap; overflow: hidden; max-width: 300px;">...
+              </p>
+            </div>
+            <i class="ri-close-line" id="cancel-edit" style="cursor: pointer;"></i>
+          </div>
+        </div>
+
+        <input type="file" id="file-input" hidden accept="image/*">
+        <button type="button" class="icon-btn" id="attach-btn"><i class="ri-attachment-2"></i></button>
+        <input type="text" id="message-input" placeholder="Написать сообщение..." autocomplete="off">
+        <button type="submit" class="icon-btn send"><i class="ri-send-plane-fill"></i></button>
+      </form>
+    </main>
+  </div>
+
+  <div class="modal-overlay" id="modal-settings">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Настройки</h3>
+        <i class="ri-close-line" style="cursor: pointer;" onclick="closeModal('modal-settings')"></i>
+      </div>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+        <div class="avatar" id="settings-avatar-preview" style="width: 80px; height: 80px; font-size: 2rem;">A</div>
+        <button class="btn-ghost" onclick="document.getElementById('avatar-upload').click()">Изменить фото</button>
+        <input type="file" id="avatar-upload" hidden accept="image/*">
+      </div>
+      <label style="font-size: 0.9rem; color: var(--text-sec);">Имя пользователя</label>
+      <input type="text" id="settings-username">
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="logout-btn">Выйти</button>
+        <button class="btn btn-primary" id="save-settings-btn">Сохранить</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-new-chat">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Новый чат</h3>
+        <i class="ri-close-line" style="cursor: pointer;" onclick="closeModal('modal-new-chat')"></i>
+      </div>
+      <input type="text" id="user-search-input" placeholder="Введите Email пользователя...">
+      <div id="search-results"
+        style="max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 5px;">
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="closeModal('modal-new-chat')">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="image-viewer" id="image-viewer">
+    <i class="ri-close-line close-viewer" id="close-viewer"></i>
+    <img id="viewer-img" src="" alt="Full view">
+  </div>
+
+  <div class="context-menu" id="ctx-menu">
+    <div class="ctx-item" id="ctx-reply"><i class="ri-reply-line"></i> Ответить</div>
+    <div class="ctx-item" id="ctx-pin"><i class="ri-pushpin-line"></i> Закрепить</div>
+    <div class="ctx-item" id="ctx-edit"><i class="ri-pencil-line"></i> Изменить</div>
+    <div class="ctx-item delete" id="ctx-delete"><i class="ri-delete-bin-line"></i> Удалить</div>
+  </div>
+
+  <script type="module" src="chat.js"></script>
+  <script>
+    window.closeModal = (id) => {
+      document.getElementById(id).classList.remove('open');
+      setTimeout(() => document.getElementById(id).style.display = 'none', 200);
+    }
+    window.openModal = (id) => {
+      const el = document.getElementById(id);
+      el.style.display = 'flex';
+      setTimeout(() => el.classList.add('open'), 10);
+    }
+  </script>
+</body>
+
+</html>

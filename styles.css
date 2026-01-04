@@ -1,0 +1,575 @@
+/* styles.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+	/* TG Dark Palette */
+	--bg-main: #0f1115; /* Основной фон */
+	--bg-sidebar: #13151b; /* Сайдбар */
+	--bg-surface: #1d2129; /* Карточки/Модалки */
+	--bg-input: #000000; /* Поля ввода (черный с прозрачностью) */
+
+	--primary: #6c78d3; /* TG Blue/Purple */
+	--primary-hover: #5b65b5;
+
+	--text-main: #ffffff;
+	--text-sec: #aaaaaa;
+
+	--msg-in: #1d2129; /* Входящее */
+	--msg-out: #6c78d3; /* Исходящее */
+
+	--border: rgba(255, 255, 255, 0.08);
+	--shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+	--radius: 16px;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Inter', sans-serif;
+	scrollbar-width: thin;
+	scrollbar-color: #2b303b transparent;
+	outline: none;
+}
+
+body {
+	background: var(--bg-main);
+	color: var(--text-main);
+	height: 100vh;
+	overflow: hidden;
+	display: flex;
+}
+
+/* --- Loader --- */
+#loader {
+	position: fixed;
+	inset: 0;
+	background: var(--bg-main);
+	z-index: 9999;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.spinner {
+	width: 40px;
+	height: 40px;
+	border: 3px solid rgba(255, 255, 255, 0.1);
+	border-top-color: var(--primary);
+	border-radius: 50%;
+	animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* --- Auth & Layout --- */
+.auth-container {
+	margin: auto;
+	width: 100%;
+	max-width: 380px;
+	padding: 40px;
+	background: var(--bg-surface);
+	border-radius: var(--radius);
+	text-align: center;
+	box-shadow: var(--shadow);
+}
+
+.chat-layout {
+	display: flex;
+	width: 100vw;
+	height: 100vh;
+}
+
+/* --- Sidebar --- */
+.sidebar {
+	width: 350px;
+	background: var(--bg-sidebar);
+	border-right: 1px solid var(--border);
+	display: flex;
+	flex-direction: column;
+	flex-shrink: 0;
+	z-index: 10;
+}
+
+.sidebar-header {
+	padding: 15px;
+	display: flex;
+	gap: 10px;
+	align-items: center;
+}
+
+.search-bar {
+	flex: 1;
+	background: rgba(0, 0, 0, 0.2);
+	padding: 8px 12px;
+	border-radius: 20px;
+	border: 1px solid var(--border);
+	color: white;
+	font-size: 0.9rem;
+	transition: 0.2s;
+}
+.search-bar:focus {
+	border-color: var(--primary);
+	background: rgba(0, 0, 0, 0.4);
+}
+
+.menu-btn {
+	background: transparent;
+	border: none;
+	color: var(--text-sec);
+	font-size: 1.4rem;
+	cursor: pointer;
+	padding: 5px;
+	border-radius: 50%;
+}
+.menu-btn:hover {
+	background: rgba(255, 255, 255, 0.1);
+	color: white;
+}
+
+.chats-list {
+	flex: 1;
+	overflow-y: auto;
+	padding: 5px;
+}
+
+.chat-item {
+	padding: 10px 12px;
+	margin: 2px 5px;
+	border-radius: 12px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	cursor: pointer;
+	transition: 0.15s;
+}
+.chat-item:hover {
+	background: rgba(255, 255, 255, 0.03);
+}
+.chat-item.active {
+	background: var(--primary);
+}
+.chat-item.active p {
+	color: rgba(255, 255, 255, 0.8);
+}
+
+.avatar {
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+	background: linear-gradient(135deg, #4facfe, #00f2fe);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 700;
+	font-size: 1.1rem;
+	color: white;
+	flex-shrink: 0;
+	overflow: hidden;
+}
+.avatar img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.chat-info {
+	flex: 1;
+	overflow: hidden;
+}
+.chat-info h4 {
+	font-size: 0.95rem;
+	margin-bottom: 3px;
+	white-space: nowrap;
+}
+.chat-info p {
+	font-size: 0.85rem;
+	color: var(--text-sec);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* --- Chat Area --- */
+.chat-main {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	background: var(--bg-main);
+	position: relative;
+	background-image: radial-gradient(
+		rgba(255, 255, 255, 0.03) 1px,
+		transparent 1px
+	);
+	background-size: 20px 20px;
+}
+
+.chat-header {
+	height: 60px;
+	padding: 0 20px;
+	background: var(--bg-surface);
+	border-bottom: 1px solid var(--border);
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	cursor: pointer;
+}
+
+.messages-area {
+	flex: 1;
+	padding: 20px 10%;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.message {
+	max-width: 450px;
+	padding: 8px 14px;
+	border-radius: 16px;
+	font-size: 0.95rem;
+	line-height: 1.4;
+	position: relative;
+	word-wrap: break-word;
+	animation: fadeUp 0.2s ease;
+}
+@keyframes fadeUp {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.message.sent {
+	align-self: flex-end;
+	background: var(--msg-out);
+	border-bottom-right-radius: 4px;
+}
+.message.received {
+	align-self: flex-start;
+	background: var(--msg-in);
+	border-bottom-left-radius: 4px;
+}
+
+.msg-image {
+	max-width: 300px;
+	border-radius: 12px;
+	cursor: pointer;
+	margin-bottom: 5px;
+}
+.msg-meta {
+	display: flex;
+	justify-content: flex-end;
+	gap: 5px;
+	font-size: 0.7rem;
+	opacity: 0.7;
+	margin-top: 2px;
+}
+
+/* Input Area */
+.input-area {
+	padding: 15px 20%;
+	background: var(--bg-surface);
+	display: flex;
+	align-items: flex-end;
+	gap: 10px;
+}
+@media (max-width: 900px) {
+	.input-area {
+		padding: 10px;
+	}
+}
+
+#message-input {
+	flex: 1;
+	background: var(--bg-input);
+	border: none;
+	padding: 12px 16px;
+	border-radius: 20px;
+	color: white;
+	resize: none;
+	min-height: 46px;
+	max-height: 120px;
+}
+
+.icon-btn {
+	width: 46px;
+	height: 46px;
+	border-radius: 50%;
+	border: none;
+	background: transparent;
+	color: var(--text-sec);
+	font-size: 1.4rem;
+	cursor: pointer;
+	transition: 0.2s;
+	flex-shrink: 0;
+}
+.icon-btn:hover {
+	color: var(--primary);
+	background: rgba(255, 255, 255, 0.05);
+}
+.icon-btn.send {
+	color: var(--primary);
+}
+.icon-btn.send:hover {
+	background: var(--primary);
+	color: white;
+}
+
+/* --- Modals (TG Style) --- */
+.modal-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.7);
+	backdrop-filter: blur(5px);
+	z-index: 100;
+	display: none;
+	justify-content: center;
+	align-items: center;
+	opacity: 0;
+	transition: opacity 0.2s;
+}
+.modal-overlay.open {
+	display: flex;
+	opacity: 1;
+}
+
+.modal {
+	background: var(--bg-surface);
+	width: 400px;
+	border-radius: 16px;
+	padding: 24px;
+	box-shadow: var(--shadow);
+	transform: scale(0.9);
+	transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+}
+.modal-overlay.open .modal {
+	transform: scale(1);
+}
+
+.modal-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+}
+.modal-header h3 {
+	font-size: 1.2rem;
+}
+
+.modal input {
+	width: 100%;
+	background: var(--bg-main);
+	border: 1px solid var(--border);
+	padding: 12px;
+	border-radius: 12px;
+	color: white;
+	transition: 0.2s;
+}
+.modal input:focus {
+	border-color: var(--primary);
+}
+
+.modal-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+	margin-top: 10px;
+}
+
+.btn {
+	padding: 10px 20px;
+	border-radius: 10px;
+	border: none;
+	font-weight: 600;
+	cursor: pointer;
+}
+.btn-ghost {
+	background: transparent;
+	color: var(--primary);
+}
+.btn-ghost:hover {
+	background: rgba(108, 120, 211, 0.1);
+}
+.btn-primary {
+	background: var(--primary);
+	color: white;
+}
+.btn-primary:hover {
+	opacity: 0.9;
+}
+
+/* User List in Create Chat */
+.user-list-item {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 10px;
+	border-radius: 10px;
+	cursor: pointer;
+}
+.user-list-item:hover {
+	background: rgba(255, 255, 255, 0.05);
+}
+
+/* Image Viewer */
+.image-viewer {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.9);
+	z-index: 200;
+	display: none;
+	justify-content: center;
+	align-items: center;
+}
+.image-viewer img {
+	max-width: 90%;
+	max-height: 90%;
+	border-radius: 8px;
+	box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+}
+.close-viewer {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	color: white;
+	font-size: 2rem;
+	cursor: pointer;
+}
+
+/* Context Menu */
+.context-menu {
+	position: absolute;
+	background: rgba(30, 30, 35, 0.95);
+	backdrop-filter: blur(10px);
+	border-radius: 12px;
+	padding: 6px;
+	min-width: 160px;
+	display: none;
+	z-index: 50;
+	box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+}
+.ctx-item {
+	padding: 8px 12px;
+	border-radius: 6px;
+	font-size: 0.9rem;
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	cursor: pointer;
+}
+.ctx-item:hover {
+	background: var(--primary);
+	color: white;
+}
+.ctx-item.delete:hover {
+	background: #ff4d4d;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+	.sidebar {
+		position: absolute;
+		height: 100%;
+		transform: translateX(-100%);
+		transition: 0.3s;
+		width: 100%;
+	}
+	.sidebar.visible {
+		transform: translateX(0);
+	}
+	.input-area {
+		padding: 10px;
+	}
+	.message {
+		max-width: 80%;
+	}
+}
+
+/* Контейнер формы (для выравнивания) */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Отступ между полями */
+    width: 100%;
+    max-width: 320px; /* Ограничение ширины */
+    margin: 0 auto;
+}
+
+/* Стили для полей ввода (Логин/Пароль) */
+.styled-input {
+    width: 100%;
+    padding: 14px 18px;
+    background: rgba(20, 20, 25, 0.6); /* Темный полупрозрачный фон */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Тонкая рамка */
+    border-radius: 14px; /* Скругление */
+    color: #ffffff;
+    font-size: 16px;
+    outline: none; /* Убираем стандартную обводку */
+    transition: all 0.3s ease; /* Плавность */
+}
+
+/* Эффект при клике на поле */
+.styled-input:focus {
+    background: rgba(30, 35, 45, 0.8);
+    border-color: #5b6aff; /* Фиолетовый акцент */
+    box-shadow: 0 0 0 4px rgba(91, 106, 255, 0.15); /* Свечение */
+}
+
+/* Цвет плейсхолдера (подсказки) */
+.styled-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Стили для кнопки "Войти" */
+.styled-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #5b6aff, #3d4dec); /* Градиент */
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 10px;
+}
+
+/* Эффект при наведении на кнопку */
+.styled-btn:hover {
+    transform: translateY(-2px); /* Легкий подъем */
+    box-shadow: 0 8px 20px rgba(91, 106, 255, 0.4); /* Тень */
+}
+
+.styled-btn:active {
+    transform: scale(0.98); /* Нажатие */
+}
+
+/* Добавить в конец styles.css */
+
+.toggle-link span {
+    transition: color 0.2s ease;
+}
+
+.toggle-link span:hover {
+    color: #8c9eff; /* Светлее основного цвета при наведении */
+    text-decoration: underline;
+}
+
+/* Правка для формы, чтобы скрытие работало корректно с display: flex */
+.login-form {
+    display: flex; /* Это уже есть, но важно убедиться */
+    flex-direction: column;
+    gap: 15px;
+}
