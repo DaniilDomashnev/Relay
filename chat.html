@@ -105,14 +105,27 @@
         <h3>Новый чат</h3>
         <i class="ri-close-line" style="cursor: pointer;" onclick="closeModal('modal-new-chat')"></i>
       </div>
-      <input type="text" id="user-search-input" placeholder="Введите Email пользователя...">
-      <div id="search-results"
-        style="max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 5px;">
+  
+      <div style="position: relative;">
+        <i class="ri-search-line"
+          style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-sec);"></i>
+        <input type="text" id="user-search-input" placeholder="Введите имя пользователя..."
+          style="padding-left: 40px; width: 100%;">
       </div>
+  
+      <div id="search-results"></div>
+  
       <div class="modal-actions">
         <button class="btn btn-ghost" onclick="closeModal('modal-new-chat')">Отмена</button>
       </div>
     </div>
+  </div>
+
+  <div style="position: relative; margin-bottom: 10px;">
+    <i class="ri-search-line"
+      style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-sec);"></i>
+    <input type="text" id="user-search-input" placeholder="Поиск по имени пользователя..."
+      style="padding-left: 38px; width: 100%; border-radius: 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--border);">
   </div>
 
   <div class="image-viewer" id="image-viewer">
